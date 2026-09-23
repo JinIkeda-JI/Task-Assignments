@@ -1,3 +1,5 @@
+name: workload-manager
+
 services:
   postgres:
     image: postgres:16-alpine
@@ -34,7 +36,7 @@ services:
       DB_USER: ${DB_USER:-workload_manager}
       DB_PASSWORD: ${DB_PASSWORD:-workload_manager}
     ports:
-      - "9000:9000"
+      - "9000:8080"
 
   frontend:
     build:
@@ -45,7 +47,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "8080:8080"
+      - "8080:80"
 
 volumes:
   postgres_data:
