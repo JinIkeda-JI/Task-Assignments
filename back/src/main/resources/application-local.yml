@@ -1,0 +1,8 @@
+# ローカル開発用プロファイル。
+# エンティティ未確定のMVP初期段階では ddl-auto: update で開発速度を優先する。
+# テーブル設計が固まったらFlyway/Liquibaseによるマイグレーション管理に切り替える想定。
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

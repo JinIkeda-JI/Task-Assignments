@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: workload-manager-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-workload_manager}
+      POSTGRES_USER: ${DB_USER:-workload_manager}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-workload_manager}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/initdb:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-workload_manager}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/backend/Dockerfile
+    container_name: workload-manager-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-workload_manager}
+      DB_USER: ${DB_USER:-workload_manager}
+      DB_PASSWORD: ${DB_PASSWORD:-workload_manager}
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/frontend/Dockerfile
+    container_name: workload-manager-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+
+volumes:
+  postgres_data:

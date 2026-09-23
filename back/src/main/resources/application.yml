@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: workload-manager
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:workload_manager}
+    username: ${DB_USER:workload_manager}
+    password: ${DB_PASSWORD:workload_manager}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: ${SERVER_PORT:8080}
+
+logging:
+  level:
+    com.jinikeda.workloadmanager: DEBUG
