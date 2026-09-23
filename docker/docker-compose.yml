@@ -34,7 +34,7 @@ services:
       DB_USER: ${DB_USER:-workload_manager}
       DB_PASSWORD: ${DB_PASSWORD:-workload_manager}
     ports:
-      - "8080:8080"
+      - "9000:9000"
 
   frontend:
     build:
@@ -45,7 +45,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "3000:80"
+      - "8080:8080"
 
 volumes:
   postgres_data:
